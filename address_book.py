@@ -21,12 +21,13 @@ def add_contact(full_name, phone, email="", city="Unknown"):
 
 def contact_id(full_name):
     """Return a short stable id derived from the contact name."""
-    return hashlib.md5(full_name.encode(), usedforsecurity=False).hexdigest()[:6]
+    digest = hashlib.md5(full_name.encode(), usedforsecurity=False)
+    return digest.hexdigest()[:6]
 
 
 def search_contacts(text):
     """Return names matching text by name or phone number."""
-    found=[]
+    found = []
     for name, info in contacts.items():
         if text.lower() in name.lower() or text in info["phone"]:
             found.append(name)
@@ -49,7 +50,6 @@ def contacts_by_city():
     for name, info in contacts.items():
         grouped.setdefault(info["city"], []).append(name)
     return grouped
-
 
 
 def print_directory():
@@ -94,8 +94,9 @@ def main():
     export_csv()
     backup_book()
     restored = restore_book()
-    print("Contacts restored:", len(restored), "| first:",sorted(restored)[0])
-    print("Restored contacts match the in-memory address book:", restored == contacts)
+    print("Contacts restored:", len(restored), "| first:", sorted(restored)[0])
+    print("Restored contacts match the in-memory address book:",
+          restored == contacts)
 
 
 if __name__ == "__main__":
